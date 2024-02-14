@@ -1,0 +1,24 @@
+---
+- name: Onboarding play
+  hosts: danaservers
+  tasks:
+   - name: Create a file
+     ansible.builtin.copy:
+      dest: "./dvir-ansible.txt"
+      content: "dvir-ansible :)"
+      mode: "0777"
+   - name: Copy file content
+     ansible.builtin.command: cat ./dvir-ansible.txt
+     register: command_output
+   - name: Print command output
+     ansible.builtin.debug:
+      msg: "{{ command_output.stdout }}"
+   - name: Install python-devel
+     become: true
+     ansible.builtin.dnf:
+      name: python36-devel.x86_64
+      state: present
+   - name: Delete file
+     ansible.builtin.file:
+      path: "./dvir-ansible.txt"
+      state: absent
